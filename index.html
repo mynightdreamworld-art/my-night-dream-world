@@ -20,6 +20,12 @@ body{background:radial-gradient(ellipse at 50% 0,#152c78 0,#1c125b 25%,#100b29 7
 .panel{border:1px solid #8f78e677;background:linear-gradient(140deg,#252364ed,#141b4de8);box-shadow:0 8px 25px #0004,0 0 17px #604cc044;padding:24px}.panel h2,.panel h3{color:#f6edff}button{box-shadow:0 0 16px #7846dd44}.smallbtn{box-shadow:none}.studio{scroll-margin-top:12px}#write-panel,#public-section{scroll-margin-top:14px}.status{line-height:1.45}.disclaimer{max-width:700px;text-align:center;margin:25px auto 0}
 @media(min-width:850px){#auth-panel{width:32%;float:left;margin-right:2%}#write-panel{width:66%;float:left;margin-top:20px}.wrap>section:nth-of-type(3){clear:both}#public-section{clear:both}.hero-visual{max-height:420px}}
 @media(max-width:700px){.topbar{padding:12px}.brand{font-size:16px}.navlinks{gap:9px}.navlinks a{font-size:11px}.wrap{padding:0 15px 55px}.hero-visual{margin:0 -15px;max-height:270px}.hero h1{margin:5px 0}.quick-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.quick-grid a{min-height:76px}.panel{padding:18px}}
+
+/* Artist/song search and licensed Spotify player */
+.artist-music{margin-top:17px;border:1px solid #74a5ef88;border-radius:17px;padding:17px;background:linear-gradient(135deg,#15275bcc,#321657aa)}
+.artist-music h3{margin:0 0 8px}.artist-music .music-row{display:flex;gap:9px;align-items:end;flex-wrap:wrap}.music-row .music-field{flex:1 1 210px}.music-row button{flex:0 0 auto}.artist-music input{margin-top:5px}.artist-music .music-help{font-size:13px;color:#d6cfeb}.artist-music .status{margin:10px 0}.artist-music iframe{width:100%;border:0;border-radius:12px;margin-top:12px;min-height:152px}.artist-music a{color:#bde7ff}.artist-music .music-actions{display:flex;gap:9px;flex-wrap:wrap}.artist-music .music-actions button{flex:1}.artist-music .labelled{font-weight:700;margin:9px 0 4px;display:block}
+
+.movie-box{padding:16px;border:1px solid #8aa8ec88;background:linear-gradient(140deg,#24164d,#17254e);border-radius:18px;margin:18px 0}.movie-box canvas{width:100%;border-radius:13px;background:#0f1034;display:block}.movie-controls{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.movie-controls button{flex:1;min-width:150px}.movie-box select{margin-top:6px}.movie-box a{color:#bde7ff;font-weight:700}.movie-box small{color:#cfc6df}.movie-caption{color:#d9d1e9;font-size:13px}
 </style>
 </head>
 <body><div class="stars"></div><nav class="topbar" aria-label="Main navigation"><a class="brand" href="#home">🌙 My Night Dream World</a><div class="navlinks"><a href="#write-panel">✏️ Write</a><a href="#dream-studio">✨ Dream Studio</a><a href="#public-section">🌎 Community</a><a href="#music-zone">🎵 Music</a></div></nav><main class="wrap" id="home">
@@ -46,7 +52,29 @@ body{background:radial-gradient(ellipse at 50% 0,#152c78 0,#1c125b 25%,#100b29 7
 <h3>🎨 My dream image & story</h3><p class="muted">Choose how dream characters should look. We don't guess their appearance.</p>
 <div class="studio-grid"><div><label for="character-age">Character age</label><select id="character-age"><option value="adult">Adult</option><option value="child">Child</option><option value="teen">Teenager</option><option value="older">Older adult</option></select></div><div><label for="character-tone">Skin tone</label><select id="character-tone"><option value="not specified">Choose if you want</option><option value="deep brown">Deep brown</option><option value="brown">Brown</option><option value="tan">Tan</option><option value="light">Light</option></select></div></div>
 <label for="character-details">Hair, clothes, friends and other details (optional)</label><input id="character-details" maxlength="350" placeholder="For example: three friends, curly hair, blue clothes">
-<div id="music-zone"></div><div class="feature-grid"><button type="button" id="draw-image">🖼️ Draw dream image</button><button type="button" id="animate">🎞️ Moving dream preview</button><button type="button" id="interpret">✨ AI Dream Meaning (needs setup)</button><button type="button" id="ai-image">🌌 AI Dream Art (needs setup)</button><button type="button" id="music">🎵 Play calming music</button><button type="button" id="stop-music" class="secondary" disabled>⏹️ Stop music</button></div>
+<div id="music-zone" class="artist-music">
+<h3>🎵 Your favorite artist & songs</h3>
+<p class="music-help">Type an artist or song to find it on Spotify. To play a song here, copy its Spotify link and paste it below. Spotify controls which songs and how much audio each listener can play.</p>
+<form id="artist-search-form" class="music-row"><div class="music-field"><label for="artist-search">Artist or song name</label><input id="artist-search" type="search" placeholder="Example: Rihanna, Davido, Beyoncé" maxlength="120" autocomplete="off"></div><button type="submit">🔎 Search Spotify</button></form>
+<label class="labelled" for="spotify-link">Paste Spotify song, artist, album or playlist link</label>
+<input type="url" id="spotify-link" placeholder="https://open.spotify.com/track/..." inputmode="url" autocomplete="off">
+<div class="music-actions row"><button id="load-spotify" type="button">▶️ Load music player</button><button class="smallbtn" type="button" id="clear-spotify">✕ Close player</button></div>
+<p class="status" id="spotify-status" role="status" aria-live="polite">The relaxing sounds above still work without a music account.</p>
+<div id="spotify-embed" aria-label="Spotify music player"></div>
+<div class="music-actions row"><button type="button" id="apple-search">🍎 Search Apple Music</button><button type="button" id="youtube-search">▶️ Find official music videos</button></div><p class="music-help">Playback is provided by Spotify, not hosted by this site. Some songs play only a preview or require Spotify login. Music belongs to its rights holders.</p>
+</div>
+<section class="movie-box" id="dream-movies">
+<h3>🎬 Dream Movie Studio — music included</h3>
+<p class="muted">Turn the dream you write above into a short, moving illustrated story. Choose free original background music. You can preview it on iPhone or Android. Where the browser supports recording, save a short video with its soundtrack.</p>
+<label for="movie-music">Free music for your movie</label>
+<select id="movie-music"><option value="dream">🌙 Dreamy night melody</option><option value="ocean">🌊 Peaceful ocean tones</option><option value="rain">🌧️ Gentle rain-inspired tones</option><option value="silent">🔇 No music</option></select>
+<canvas id="movie-canvas" width="640" height="360" role="img" aria-label="Animated illustrated dream video preview"></canvas>
+<div class="movie-controls"><button type="button" id="preview-movie">▶️ Preview my dream movie</button><button type="button" id="record-movie">🎥 Save movie with free music</button><button type="button" class="smallbtn" id="stop-movie">⏹ Stop</button></div>
+<p class="status" id="movie-status" role="status" aria-live="polite">Write your dream above, then choose Preview or Save.</p>
+<a id="movie-download" class="hidden" download="my-night-dream-world-movie.webm">⬇️ Download my dream movie</a>
+<p class="movie-caption">This is an original animated illustration made in your browser, not an AI-generated film. Browser recording support varies, especially on iPhone. Music from Spotify or Apple Music cannot be copied into downloadable movies without rights.</p>
+</section>
+<div class="feature-grid"><button type="button" id="draw-image">🖼️ Draw dream image</button><button type="button" id="animate">🎞️ Moving dream preview</button><button type="button" id="interpret">✨ AI Dream Meaning (needs setup)</button><button type="button" id="ai-image">🌌 AI Dream Art (needs setup)</button><button type="button" id="music">🎵 Play calming music</button><button type="button" id="stop-music" class="secondary" disabled>⏹️ Stop music</button></div>
 <div class="status" id="feature-status" role="status" aria-live="polite">Create an illustrated dream scene here. AI features need a secure service connection.</div>
 <div id="image-output" class="scene hidden"><div id="image-art" aria-label="Illustrated dream scene"></div><p class="tiny" id="image-caption"></p><button type="button" class="smallbtn" id="download-scene">Save illustration</button></div>
 <div id="animation-output" class="preview hidden"><div class="clouds">☁️ ☁️ ☁️</div><div class="sky" id="scene-sky">🌙 ✨ 🌍</div><p class="caption" id="scene-caption"></p></div>
@@ -132,4 +160,78 @@ el('animate').onclick=()=>{const dream=dreamInput();if(!dream)return;dreamScene(
 let audioCtx=null,tones=[],gainNode=null;
 el('music').onclick=async()=>{try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('Audio is not supported here.');if(audioCtx)return;audioCtx=new AC();gainNode=audioCtx.createGain();gainNode.gain.value=0.0001;gainNode.connect(audioCtx.destination);const now=audioCtx.currentTime;gainNode.gain.exponentialRampToValueAtTime(0.035,now+2);for(const hz of [174.61,261.63,349.23]){const tone=audioCtx.createOscillator();tone.type='sine';tone.frequency.value=hz;tone.connect(gainNode);tone.start();tones.push(tone);}await audioCtx.resume();el('music').disabled=true;el('stop-music').disabled=false;featureStatus('Playing original soft ambient tones. Adjust your phone volume if needed.','ok');}catch(e){audioCtx=null;featureStatus('Could not play music: '+shortError(e),'error');}};
 el('stop-music').onclick=async()=>{if(!audioCtx)return;const context=audioCtx;gainNode.gain.cancelScheduledValues(context.currentTime);gainNode.gain.setTargetAtTime(0.0001,context.currentTime,0.1);setTimeout(async()=>{tones.forEach(t=>{try{t.stop();}catch{}});tones=[];try{await context.close();}catch{}},700);audioCtx=null;el('music').disabled=false;el('stop-music').disabled=true;featureStatus('Music stopped.','ok');};
+
+// Spotify supports legal embeds from real Spotify links. Search opens Spotify's own search page.
+const spotifyStatus=message=>{el('spotify-status').textContent=message;};
+el('artist-search-form').addEventListener('submit',event=>{
+ event.preventDefault();const query=el('artist-search').value.trim();if(!query){spotifyStatus('Enter an artist or song name first.');return;}
+ const url='https://open.spotify.com/search/'+encodeURIComponent(query);
+ const tab=window.open(url,'_blank','noopener,noreferrer');
+ spotifyStatus(tab?'Spotify search opened. Choose a song, use Share → Copy link, return here, and paste the link below.':'Open Spotify search: '+url);
+});
+el('load-spotify').addEventListener('click',()=>{
+ const raw=el('spotify-link').value.trim();let parsed;
+ try{parsed=new URL(raw);}catch{spotifyStatus('Paste a full Spotify link starting with https://open.spotify.com/');return;}
+ if(parsed.protocol!=='https:' || parsed.hostname!=='open.spotify.com'){spotifyStatus('Only official open.spotify.com links can be embedded.');return;}
+ const parts=parsed.pathname.split('/').filter(Boolean);
+ const types=['track','artist','album','playlist','episode','show'];
+ let i=parts.findIndex(part=>types.includes(part));
+ if(i<0||!parts[i+1]||!/^[A-Za-z0-9]{15,30}$/.test(parts[i+1])){spotifyStatus('This Spotify link is not supported. Copy the Share link for a track, artist, playlist or album.');return;}
+ const type=parts[i],id=parts[i+1];
+ const frame=document.createElement('iframe');
+ frame.title='Spotify '+type+' player';frame.src='https://open.spotify.com/embed/'+type+'/'+id;
+ frame.height=(type==='track'||type==='episode')?'152':'352';
+ frame.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');frame.setAttribute('loading','lazy');
+ el('spotify-embed').replaceChildren(frame);spotifyStatus('Spotify player loaded. Press Play inside the player. Spotify determines available playback.');
+});
+el('clear-spotify').addEventListener('click',()=>{el('spotify-embed').replaceChildren();spotifyStatus('Music player closed.');});
+
+// Artist discovery uses official streaming-service search pages. We do not host unlicensed recordings.
+function artistQuery(){return el('artist-search').value.trim();}
+el('apple-search').addEventListener('click',()=>{let q=artistQuery();if(!q){spotifyStatus('Type an artist or song name first.');return;}window.open('https://music.apple.com/us/search?term='+encodeURIComponent(q),'_blank','noopener,noreferrer');});
+el('youtube-search').addEventListener('click',()=>{let q=artistQuery();if(!q){spotifyStatus('Type an artist or song name first.');return;}window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q+' official music'),'_blank','noopener,noreferrer');});
+
+// An eight-second canvas movie with an original, low-volume synthesized soundtrack.
+// This is intentionally NOT represented as paid AI video generation.
+const movieCanvas=el('movie-canvas');const movieCtx=movieCanvas.getContext('2d');
+let movieFrame=0, movieStart=0, movieRecording=null, movieAudio=null, movieStream=null, moviePieces=[], movieStopHandler=null;
+let movieActive=false, movieText='',movieTheme='dream';
+function movieMessage(message,kind=''){status('movie-status',message,kind);}
+function getMovieTheme(t){if(/plane|fly|flight|travel|airplane|airport/i.test(t))return 'flight';if(/sea|ocean|river|swim|water/i.test(t))return 'ocean';if(/forest|tree|mountain|nature/i.test(t))return 'forest';if(/house|home|room/i.test(t))return 'home';return 'dream';}
+function roundFill(x,y,w,h,r,color){movieCtx.fillStyle=color;movieCtx.beginPath();movieCtx.roundRect(x,y,w,h,r);movieCtx.fill();}
+function paintMovie(ms=0){
+ const c=movieCtx,w=640,h=360,time=ms/1000;
+ const g=c.createLinearGradient(0,0,w,h);g.addColorStop(0,'#160c3e');g.addColorStop(.55,'#343477');g.addColorStop(1,'#071d48');c.fillStyle=g;c.fillRect(0,0,w,h);
+ for(let i=0;i<55;i++){const x=(i*127+37)%w,y=(i*79+19)%245;const r=i%4===0?2:1;c.fillStyle=`rgba(255,246,207,${.45+.5*Math.sin(time*1.7+i)**2})`;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
+ c.shadowColor='#fae7a7';c.shadowBlur=22;c.fillStyle='#f8df9d';c.beginPath();c.arc(508,75,34,0,2*Math.PI);c.fill();c.shadowBlur=0;
+ c.fillStyle='#35316d';c.beginPath();c.arc(521,63,34,0,2*Math.PI);c.fill();
+ c.fillStyle='#25275b';c.beginPath();c.moveTo(0,303);c.quadraticCurveTo(190,250,330,306);c.quadraticCurveTo(460,277,640,298);c.lineTo(640,360);c.lineTo(0,360);c.fill();
+ const objects={flight:'✈️',ocean:'⛵',forest:'🌲',home:'🏠',dream:'🌎'};
+ c.save();c.translate(320+Math.sin(time*.6)*100,175+Math.sin(time*1.5)*12);c.rotate(Math.sin(time*.3)*.07);c.font='94px system-ui, Apple Color Emoji, Segoe UI Emoji';c.textAlign='center';c.fillText(objects[movieTheme],0,0);c.restore();
+ c.fillStyle='#fdf0ff';c.font='bold 24px system-ui';c.textAlign='center';c.fillText('MY NIGHT DREAM WORLD',320,36);
+ const clean=movieText.replace(/\s+/g,' ').slice(0,140);c.font='17px system-ui';const words=clean.split(' ');let lines=[''];for(const word of words){const idx=lines.length-1;if(c.measureText(lines[idx]+' '+word).width>530&&lines.length<3)lines.push(word);else lines[idx]+=(lines[idx]?' ':'')+word;}
+ roundFill(37,267,566,79,16,'rgba(14,11,42,.82)');c.fillStyle='#fff';lines.forEach((line,i)=>c.fillText(line,320,292+i*20));
+}
+paintMovie();
+function stopMovie(){movieActive=false;if(movieFrame)cancelAnimationFrame(movieFrame);movieFrame=0;if(movieRecording&&movieRecording.state==='recording')movieRecording.stop();else cleanupMovieAudio();}
+function cleanupMovieAudio(){if(movieAudio){try{movieAudio.close();}catch(e){}movieAudio=null;}if(movieStream){movieStream.getTracks().forEach(t=>t.stop());movieStream=null;}}
+function animateMovie(now){if(!movieActive)return;const t=now-movieStart;paintMovie(t);if(t>=8000){stopMovie();if(!movieRecording)movieMessage('Dream movie preview finished.','ok');return;}movieFrame=requestAnimationFrame(animateMovie);}
+function beginMovie(){const val=el('dream').value.trim();if(!val){movieMessage('First write a dream in the box above.','error');return false;}stopMovie();const a=el('movie-download');a.classList.add('hidden');movieText=val;movieTheme=getMovieTheme(val);movieActive=true;movieStart=performance.now();movieFrame=requestAnimationFrame(animateMovie);return true;}
+el('preview-movie').addEventListener('click',()=>{if(beginMovie())movieMessage('Playing your original illustrated dream movie.','ok');});
+el('stop-movie').addEventListener('click',()=>{stopMovie();movieMessage('Movie stopped.');});
+async function originalMovieAudio(){const choice=el('movie-music').value;if(choice==='silent')return null;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+ const ac=new AC(),destination=ac.createMediaStreamDestination(),main=ac.createGain();main.gain.value=.022;main.connect(destination);const notes={dream:[174.61,261.63,349.23],ocean:[146.83,220,293.66],rain:[196,246.94,329.63]}[choice]||[174.61,261.63,349.23];
+ for(const f of notes){const osc=ac.createOscillator();osc.type='sine';osc.frequency.value=f;osc.connect(main);osc.start();osc.stop(ac.currentTime+9);}await ac.resume();movieAudio=ac;return destination.stream.getAudioTracks()[0]||null;
+}
+el('record-movie').addEventListener('click',async()=>{
+ if(!movieCanvas.captureStream||typeof MediaRecorder==='undefined'){movieMessage('This browser cannot record the animated movie. You can still preview it. Try a recent Chrome or Safari version for saving.','error');return;}
+ if(!beginMovie())return;
+ try{movieStream=movieCanvas.captureStream(24);const soundtrack=await originalMovieAudio();if(soundtrack)movieStream.addTrack(soundtrack);
+ const variants=['video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];const format=variants.find(m=>MediaRecorder.isTypeSupported(m));if(!format)throw Error('Video recording format is not supported on this browser.');
+ moviePieces=[];movieRecording=new MediaRecorder(movieStream,{mimeType:format,videoBitsPerSecond:1400000});const recorder=movieRecording;
+ recorder.ondataavailable=e=>{if(e.data&&e.data.size)moviePieces.push(e.data);};recorder.onerror=()=>movieMessage('Movie recording failed on this device. Try the preview.','error');
+ recorder.onstop=()=>{if(moviePieces.length){const blob=new Blob(moviePieces,{type:format});const a=el('movie-download');if(a.dataset.url)URL.revokeObjectURL(a.dataset.url);a.href=URL.createObjectURL(blob);a.dataset.url=a.href;a.download='my-night-dream-world-movie.'+(format.includes('mp4')?'mp4':'webm');a.classList.remove('hidden');movieMessage('Movie ready! Tap Download my dream movie below.','ok');}else movieMessage('Recording is not supported by this browser. Please use preview instead.','error');cleanupMovieAudio();movieRecording=null;};
+ recorder.start(1000);movieMessage('Recording your illustrated dream with free music…','ok');
+ }catch(e){stopMovie();movieMessage('Could not record on this device: '+e.message,'error');}
+});
 </script></body></html>
